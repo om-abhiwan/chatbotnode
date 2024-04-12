@@ -22,6 +22,6 @@ const MediaSchema = new mongoose.Schema({
 
 
 
-const Media = mongoose.model("uploadmedia",MediaSchema)
+const UploadMedia = mongoose.model("uploadmedia",MediaSchema)
 
-module.exports = Media
+module.exports = UploadMedia

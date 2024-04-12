@@ -1,7 +1,6 @@
 const { DataModel } = require("../models/uploadDataSchema")
 const csvParser = require('csv-parser');
 const fs = require('fs');
-const UploadMedia = require("../models/uploadMediaSchema");
 
 
 exports.uploadData = async (req, res) => {const file = req.file;
@@ -27,37 +26,10 @@ exports.uploadData = async (req, res) => {const file = req.file;
             questionsToUpdate.push(existingQuestion.save());
           } else {
             // Insert a new question
-            const newData  = await DataModel.create({
+            questionsToInsert.push(DataModel.create({
               question: data.question,
               answers: data.answers,
-            });
-
-
-
-            if(data.video){
-              await UploadMedia.create({
-                link:data.video,
-                categories:"video",
-                question_id:newData._id.toString()
-              })
-            }
-
-
-            if(data.pdf){
-              await UploadMedia.create({
-                link:data.pdf,
-                categories:"PDF",
-                question_id:newData._id.toString()
-              })
-            }
-            if(data.image){
-              await UploadMedia.create({
-                link:data.image,
-                categories:"Images",
-                question_id:newData._id.toString()
-              })
-            }
-          
+            }));
           }
         })
         .on('end', async () => {
