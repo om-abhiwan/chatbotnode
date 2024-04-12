@@ -30,6 +30,7 @@ exports.uploadData = async (req, res) => {const file = req.file;
               question: data.question,
               answers: data.answers,
             }));
+            console.log(questionsToInsert)
           }
         })
         .on('end', async () => {
