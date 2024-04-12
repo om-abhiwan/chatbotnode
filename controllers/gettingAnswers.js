@@ -10,6 +10,9 @@ exports.getAnswerTest = async (req, res) => {
         if(resp==="I'm sorry, I didn't understand that."){
             return res.status(200).json({response:noResult,data:data})
         }
+
+        console.log(resp)
+
         return res.status(200).json({response:resp.answers,data:data})
     } catch (error) {
         console.error("Error:", error);
