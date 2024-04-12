@@ -22,9 +22,9 @@ exports.getAnswerTest = async (req, res) => {
             if(media.length!=0){
                 data = media
             }
+            console.log(media)
         }
         
-        console.log(media)
         
         
 
