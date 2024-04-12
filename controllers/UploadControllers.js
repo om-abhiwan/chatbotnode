@@ -26,6 +26,7 @@ exports.uploadData = async (req, res) => {const file = req.file;
             existingQuestion.answers = data.answers;
             questionsToUpdate.push(existingQuestion.save());
           } else {
+            
             // Insert a new question
             const newData  = await DataModel.create({
               question: data.question,
@@ -33,7 +34,7 @@ exports.uploadData = async (req, res) => {const file = req.file;
             });
 
 
-
+            // to save video in db corresponding to the question
             if(data.video){
               await UploadMedia.create({
                 link:data.video,
@@ -41,8 +42,9 @@ exports.uploadData = async (req, res) => {const file = req.file;
                 question_id:newData._id.toString()
               })
             }
-
-
+            
+            
+            // to save pdf in db corresponding to the question
             if(data.pdf){
               await UploadMedia.create({
                 link:data.pdf,
@@ -50,6 +52,9 @@ exports.uploadData = async (req, res) => {const file = req.file;
                 question_id:newData._id.toString()
               })
             }
+            
+            
+            // to save image in db corresponding to the question
             if(data.image){
               await UploadMedia.create({
                 link:data.image,
@@ -57,6 +62,8 @@ exports.uploadData = async (req, res) => {const file = req.file;
                 question_id:newData._id.toString()
               })
             }
+
+
           
           }
         })
