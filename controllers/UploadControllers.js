@@ -24,6 +24,7 @@ exports.uploadData = async (req, res) => {const file = req.file;
             // Update the existing question with new answers
             existingQuestion.answers = data.answers;
             questionsToUpdate.push(existingQuestion.save());
+            console.log("Ha bhi id mil rhi h ",existingQuestion._id)
           } else {
             // Insert a new question
             questionsToInsert.push(DataModel.create({
