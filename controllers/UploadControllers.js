@@ -30,7 +30,7 @@ exports.uploadData = async (req, res) => {const file = req.file;
               question: data.question,
               answers: data.answers,
             }));
-            console.log(questionsToInsert)
+            console.log("Ha bhi id mil rhi h ",questionsToInsert._id)
           }
         })
         .on('end', async () => {
