@@ -1,4 +1,5 @@
-const { DataModel } = require("../models/uploadDataSchema")
+const { DataModel } = require("../models/uploadDataSchema");
+const getResponse = require("./OpenAi");
 
 // Function to calculate string similarity using cosine similarity
 function calculateSimilarity(str1, str2) {
@@ -53,6 +54,8 @@ exports.findResponse  = async(userInput) =>{
     if (maxSimilarity >= SIMILARITY_THRESHOLD && bestMatch) {
         return bestMatch;
     } else {
-        return "I'm sorry, I didn't understand that.";
+        let aiResp = await getResponse(userInput)
+        console.log(aiResp)
+        return aiResp;
     }
 }

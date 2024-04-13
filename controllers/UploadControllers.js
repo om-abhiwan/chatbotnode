@@ -26,7 +26,7 @@ exports.uploadData = async (req, res) => {const file = req.file;
             existingQuestion.answers = data.answers;
             questionsToUpdate.push(existingQuestion.save());
           } else {
-            
+
             // Insert a new question
             const newData  = await DataModel.create({
               question: data.question,
@@ -68,6 +68,7 @@ exports.uploadData = async (req, res) => {const file = req.file;
           }
         })
         .on('end', async () => {
+          
           // Wait for all updates and inserts to complete
           await Promise.all(questionsToUpdate);
           await Promise.all(questionsToInsert);
