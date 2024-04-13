@@ -68,11 +68,6 @@ exports.getAns = async (req, res) => {
                     return res.status(200).json({ response: aiResult, data: data })
                 }
 
-
-
-
-
-
                 return res.status(200).json({ response: bestMatch.answers, data: data })
 
             } else {
@@ -96,6 +91,7 @@ exports.getAns = async (req, res) => {
                             data = media
                         }
                     } catch (err) {
+                        const resp = await findResponse(question);
                         let aiResult = resp
                         return res.status(200).json({ response: aiResult, data: data })
                     }
