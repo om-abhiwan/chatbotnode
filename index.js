@@ -6,7 +6,8 @@ const express = require('express');
 
 const app = express();
 const cors = require("cors")
-app.use(cors({origin: '*'}))
+// app.use(cors({origin: '*'}))
+app.use(cors())
 
 const uploadQuestion = require("./Routes/uploadQuestions");
 const answerRoutes = require("./Routes/answersRoutes");
