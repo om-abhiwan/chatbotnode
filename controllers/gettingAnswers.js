@@ -106,7 +106,7 @@ exports.getAns = async (req, res) => {
                     return res.status(200).json({ response: bestMatch.answers, data: data })
 
                 } else {
-                    let aiResp = await getResponse(userInput)
+                    let aiResp = await getResponse(question)
                     return res.status(200).json({ msg: aiResp });
                 }
 
