@@ -11,8 +11,6 @@ exports.getAnswerTest = async (req, res) => {
 
         let data = ""
 
-
-
         try {
             // if user has media like img, video and pdf
             const media = await UploadMedia.find({ question_id: resp._id.toString() }).select({ categories: 1, link: 1, _id: 0 })
@@ -36,19 +34,18 @@ exports.getAnswerTest = async (req, res) => {
 
 
 exports.getAns = async (req, res) => {
-    const { userInput } = req.body;
+    const { question } = req.query;
 
-    const userInputLower = userInput.toLowerCase().trim();
+    const userInputLower = question.toLowerCase().trim();
 
-    console.log("\n---------------------------------------------\n", userInput)
+    console.log("\n---------------------------------------------\n", question)
 
     try {
         // Check if DataModel is properly imported and defined
         if (DataModel) {
 
-
-
-            const results = await DataModel.find({ $text: { $search: userInputLower } },
+            // const results = await DataModel.find({ $text: { $search: userInputLower } },
+            const results = await DataModel.find({ $text: { $search: `\"${userInputLower}\"` } },
                 { score: { $meta: 'textScore' } }
             ).sort({ score: { $meta: 'textScore' } });
 
@@ -78,43 +75,41 @@ exports.getAns = async (req, res) => {
 
                 return res.status(200).json({ response: bestMatch.answers, data: data })
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                // Process bestMatch or return the result as needed
-
-                // res.status(200).json({ data: bestMatch })
-
-
-
-
-
             } else {
-                let aiResp = await getResponse(userInput)
-                return res.status(200).json({ msg: aiResp });
+
+
+                const results = await DataModel.find({ $text: { $search: userInputLower } },
+                    { score: { $meta: 'textScore' } }
+                ).sort({ score: { $meta: 'textScore' } });
+
+
+                if (results.length > 0) {
+                    const bestMatch = results[0];
+
+
+
+                    let data = ""
+
+                    try {
+                        const media = await UploadMedia.find({ question_id: bestMatch._id.toString() }).select({ categories: 1, link: 1, _id: 0 })
+                        if (media.length != 0) {
+                            data = media
+                        }
+                    } catch (err) {
+                        let aiResult = resp
+                        return res.status(200).json({ response: aiResult, data: data })
+                    }
+
+
+
+
+                    return res.status(200).json({ response: bestMatch.answers, data: data })
+
+                } else {
+                    let aiResp = await getResponse(userInput)
+                    return res.status(200).json({ msg: aiResp });
+                }
+
             }
 
 
