@@ -11,6 +11,8 @@ exports.getAnswerTest = async (req, res) => {
 
         let data = ""
 
+
+
         try {
             // if user has media like img, video and pdf
             const media = await UploadMedia.find({ question_id: resp._id.toString() }).select({ categories: 1, link: 1, _id: 0 })
@@ -34,6 +36,7 @@ exports.getAnswerTest = async (req, res) => {
 
 
 exports.getAns = async (req, res) => {
+    // const { userInput } = req.body;
     const { question } = req.query;
 
     const userInputLower = question.toLowerCase().trim();
@@ -44,26 +47,25 @@ exports.getAns = async (req, res) => {
         // Check if DataModel is properly imported and defined
         if (DataModel) {
 
-            // const results = await DataModel.find({ $text: { $search: userInputLower } },
-            const results = await DataModel.find({ $text: { $search: `\"${userInputLower}\"` } },
+            const results = await DataModel.find({ $text: { $search: userInputLower } },
+            // const results = await DataModel.find({ $text: { $search: `\"${userInputLower}\"` } },
                 { score: { $meta: 'textScore' } }
             ).sort({ score: { $meta: 'textScore' } });
 
             if (results.length > 0) {
 
-
                 const bestMatch = results[0];
-
-
 
                 let data = ""
 
+                // Fetching Media
                 try {
                     const media = await UploadMedia.find({ question_id: bestMatch._id.toString() }).select({ categories: 1, link: 1, _id: 0 })
                     if (media.length != 0) {
                         data = media
                     }
                 } catch (err) {
+                    // genrating Ai Response
                     let aiResult = resp
                     return res.status(200).json({ response: aiResult, data: data })
                 }
@@ -71,43 +73,10 @@ exports.getAns = async (req, res) => {
                 return res.status(200).json({ response: bestMatch.answers, data: data })
 
             } else {
-
-
-                const results = await DataModel.find({ $text: { $search: userInputLower } },
-                    { score: { $meta: 'textScore' } }
-                ).sort({ score: { $meta: 'textScore' } });
-
-
-                if (results.length > 0) {
-                    const bestMatch = results[0];
-
-
-
-                    let data = ""
-
-                    try {
-                        const media = await UploadMedia.find({ question_id: bestMatch._id.toString() }).select({ categories: 1, link: 1, _id: 0 })
-                        if (media.length != 0) {
-                            data = media
-                        }
-                    } catch (err) {
-                        const resp = await findResponse(question);
-                        let aiResult = resp
-                        return res.status(200).json({ response: aiResult, data: data })
-                    }
-
-
-
-
-                    return res.status(200).json({ response: bestMatch.answers, data: data })
-
-                } else {
-                    let aiResp = await getResponse(question)
-                    return res.status(200).json({ msg: aiResp });
-                }
-
+                // genrating ai result
+                let aiResp = await getResponse(question)
+                return res.status(200).json({ msg: aiResp });
             }
-
 
 
         } else {
