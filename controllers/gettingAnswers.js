@@ -47,8 +47,8 @@ exports.getAns = async (req, res) => {
         // Check if DataModel is properly imported and defined
         if (DataModel) {
 
-            const results = await DataModel.find({ $text: { $search: userInputLower } },
-            // const results = await DataModel.find({ $text: { $search: `\"${userInputLower}\"` } },
+            // const results = await DataModel.find({ $text: { $search: userInputLower } },
+            const results = await DataModel.find({ $text: { $search: `\"${userInputLower}\"` } },
                 { score: { $meta: 'textScore' } }
             ).sort({ score: { $meta: 'textScore' } });
 
