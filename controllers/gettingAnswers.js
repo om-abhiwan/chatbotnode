@@ -75,7 +75,7 @@ exports.getAns = async (req, res) => {
             } else {
                 // genrating ai result
                 let aiResp = await getResponse(question)
-                return res.status(200).json({ msg: aiResp });
+                return res.status(200).json({ response: aiResp, data:"" });
             }
 
 
